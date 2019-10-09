@@ -31,11 +31,12 @@ std_theme <-   theme_minimal() +
 chart_a <- df %>% ggplot(aes(x = quintile, y = rate)) +
   geom_col() +
   std_theme +
-  coord_fixed() +
   scale_x_continuous(breaks = c(1:5),
-                     labels = c("Quintile 1 - most deprived", 
+                     labels = c("Most deprived", 
                                 "", "", "",
-                                "Qunitle 5 - least deprived"))
+                                "Least deprived")) +
+  scale_y_continuous(limits = c(0, 1+max(rate)))
+  
 chart_a
 
 ## chart b - add hlines for Q1 and Q5, plus arrows to show gap
@@ -60,7 +61,11 @@ chart_c <- df %>% mutate(rate =ifelse(quintile %in% c(1,
   ggplot(aes(x = quintile, y = rate)) +
   geom_col() +
   std_theme +
-  coord_fixed() + 
+  scale_x_continuous(breaks = c(1:5),
+                     labels = c("Most deprived", 
+                                "", "", "",
+                                "Least deprived")) +
+  scale_y_continuous(limits = c(0, 1+max(rate))) +
   geom_hline(yintercept = max(df$rate), linetype="dashed", color = "red") +
   geom_hline(yintercept = min(df$rate), linetype="dashed", color = "red") +
   geom_segment(aes(x = 5, y = min(df$rate), # pointing up
@@ -82,7 +87,6 @@ print(lin_mod)
 
 # plot chart
 chart_d <- chart_a +
-  scale_y_continuous(limits = c(0, 1+max(rate))) +
   geom_abline(intercept = lin_mod$coef[1], 
               slope = lin_mod$coef[2],
               linetype = "dashed",  color = "red") 
