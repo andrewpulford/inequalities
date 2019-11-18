@@ -57,7 +57,7 @@ chart_b
 
 ## chart c - remove quintiles 2-4 to show data/pop not considered by gap
 chart_c <- df %>% mutate(rate =ifelse(quintile %in% c(1, 
-                                         5), rate, 0)) %>% 
+                                         5), rate, NA)) %>% 
   ggplot(aes(x = quintile, y = rate)) +
   geom_col() +
   std_theme +
